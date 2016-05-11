@@ -7,6 +7,7 @@ mkdir -p Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/
 cd Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/  
 git clone https://github.com/studer-raimann/AdvancedSvyResults.git  
 ```  
+
 As ILIAS administrator go to "Administration->Plugins" and install/activate the plugin.  
 
 ###Contact
