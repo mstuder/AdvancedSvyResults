@@ -49,10 +49,9 @@ class ilSurveyExtEvaluationGUI extends ilSurveyEvaluationGUI {
 		parent::ilSurveyEvaluationGUI($a_object);
 		$this->lng->loadLanguageModule('survey');
 		$this->pl = ilAdvancedSvyResultsPlugin::getInstance();
-		//		$this->pl->updateLanguageFiles();
 		$this->ctrl->saveParameter($this, 'ref_id');
 		$this->ctrl->setParameterByClass('ilExtSurveyEditorGUI', 'ref_id', $_GET['ref_id']);
-		//		$this->initHeader();
+		$this->ctrl->setParameterByClass('ilsurveyeditorgui', 'ref_id', $_GET['ref_id']);
 	}
 
 
@@ -61,13 +60,16 @@ class ilSurveyExtEvaluationGUI extends ilSurveyEvaluationGUI {
 	}
 
 
+	/**
+	 * @param $name
+	 * @param $arguments
+	 */
 	public function __call($name, $arguments) {
 		if ($name == 'exitSurvey') {
 			return;
 		}
 
 		$ilSurveyExecutionGUI = new ilSurveyExecutionGUI(new ilObjSurvey($_GET['ref_id']));
-		//		$ilSurveyExecutionGUI->exitSurvey();
 		$ilSurveyExecutionGUI->preview = true;
 		$ilSurveyExecutionGUI->{$name}();
 	}
@@ -78,10 +80,12 @@ class ilSurveyExtEvaluationGUI extends ilSurveyEvaluationGUI {
 	}
 
 
-	function evaluation($details = 0) {
+	/**
+	 * @param int $details
+	 */
+	public function evaluation($details = 0) {
 		global $rbacsystem;
 		global $ilToolbar;
-		global $ilUser;
 
 		// auth
 		if (!$rbacsystem->checkAccess("write", $_GET["ref_id"])) {
@@ -113,7 +117,7 @@ class ilSurveyExtEvaluationGUI extends ilSurveyEvaluationGUI {
 
 		$this->tpl->addBlockFile("ADM_CONTENT", "adm_content", "tpl.il_svy_svy_evaluation.html", "Modules/Survey");
 
-		$data = NULL;
+		$data = null;
 
 		if ($this->object->get360Mode()) {
 			$appr_id = $this->getAppraiseeId();
@@ -123,16 +127,16 @@ class ilSurveyExtEvaluationGUI extends ilSurveyEvaluationGUI {
 		if (!$this->object->get360Mode() || $appr_id) {
 			$format = new ilSelectInputGUI("", "export_format");
 			$format->setOptions(array(
-				self::TYPE_XLS => $this->lng->txt('exp_type_excel'),
-				self::TYPE_SPSS => $this->lng->txt('exp_type_csv')
+				self::TYPE_XLS  => $this->lng->txt('exp_type_excel'),
+				self::TYPE_SPSS => $this->lng->txt('exp_type_csv'),
 			));
 			$ilToolbar->addInputItem($format);
 
 			$label = new ilSelectInputGUI("", "export_label");
 			$label->setOptions(array(
-				'label_only' => $this->lng->txt('export_label_only'),
-				'title_only' => $this->lng->txt('export_title_only'),
-				'title_label' => $this->lng->txt('export_title_label')
+				'label_only'  => $this->lng->txt('export_label_only'),
+				'title_only'  => $this->lng->txt('export_title_only'),
+				'title_label' => $this->lng->txt('export_title_label'),
 			));
 			$ilToolbar->addInputItem($label);
 
@@ -142,7 +146,7 @@ class ilSurveyExtEvaluationGUI extends ilSurveyEvaluationGUI {
 				$ilToolbar->addFormButton($this->lng->txt("export"), 'exportData');
 			}
 
-			$finished_ids = NULL;
+			$finished_ids = null;
 			if ($appr_id) {
 				$finished_ids = $this->object->getFinishedIdsForAppraiseeId($appr_id);
 				if (!sizeof($finished_ids)) {
@@ -153,7 +157,7 @@ class ilSurveyExtEvaluationGUI extends ilSurveyEvaluationGUI {
 			$questions =& $this->object->getSurveyQuestions();
 			$data = array();
 			$counter = 1;
-			$last_questionblock_id = NULL;
+			$last_questionblock_id = null;
 			include_once "./Modules/SurveyQuestionPool/classes/class.SurveyQuestion.php";
 			require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/AdvancedSvyResults/classes/QuestionTypes/class.asrQuestionTypeMapper.php');
 			require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/AdvancedSvyResults/classes/Presentation/class.asrPresentation.php');
@@ -173,8 +177,7 @@ class ilSurveyExtEvaluationGUI extends ilSurveyEvaluationGUI {
 					$main = array_shift($c);
 					$main['own_choice'] = asrQuestionTypeMapper::getTextRepresentation($question_gui);
 
-//					var_dump($c); // FSX
-					foreach ($c as $k=> $cc) {
+					foreach ($c as $k => $cc) {
 						$c[$k]['own_choice'] = asrQuestionTypeMapper::getTextRepresentation($question_gui, $k);
 					}
 
@@ -254,7 +257,7 @@ class ilSurveyExtEvaluationGUI extends ilSurveyEvaluationGUI {
 
 		$this->tpl->addBlockFile('ADM_CONTENT', 'adm_content', 'tpl.il_svy_svy_evaluation.html', 'Modules/Survey');
 
-		$data = NULL;
+		$data = null;
 
 		if ($this->object->get360Mode()) {
 			$appr_id = $this->getAppraiseeId();
@@ -264,16 +267,16 @@ class ilSurveyExtEvaluationGUI extends ilSurveyEvaluationGUI {
 		if (!$this->object->get360Mode() || $appr_id) {
 			$format = new ilSelectInputGUI('', 'export_format');
 			$format->setOptions(array(
-				self::TYPE_XLS => $this->lng->txt('exp_type_excel'),
-				self::TYPE_SPSS => $this->lng->txt('exp_type_csv')
+				self::TYPE_XLS  => $this->lng->txt('exp_type_excel'),
+				self::TYPE_SPSS => $this->lng->txt('exp_type_csv'),
 			));
 			$ilToolbar->addInputItem($format);
 
 			$label = new ilSelectInputGUI('', 'export_label');
 			$label->setOptions(array(
-				'label_only' => $this->lng->txt('export_label_only'),
-				'title_only' => $this->lng->txt('export_title_only'),
-				'title_label' => $this->lng->txt('export_title_label')
+				'label_only'  => $this->lng->txt('export_label_only'),
+				'title_only'  => $this->lng->txt('export_title_only'),
+				'title_label' => $this->lng->txt('export_title_label'),
 			));
 			$ilToolbar->addInputItem($label);
 
@@ -283,20 +286,20 @@ class ilSurveyExtEvaluationGUI extends ilSurveyEvaluationGUI {
 				$ilToolbar->addFormButton($this->lng->txt('export'), 'exportData');
 			}
 
-			$finished_ids = NULL;
+			$finished_ids = null;
 			if ($appr_id) {
 				$finished_ids = $this->object->getFinishedIdsForAppraiseeId($appr_id);
 				if (!sizeof($finished_ids)) {
 					$finished_ids = array( - 1 );
 				}
 			}
-			$userResults = $this->object->getUserSpecificResults(NULL);
-			$activeID = $this->object->getActiveID($ilUser->getId(), NULL, 0);
+			$userResults = $this->object->getUserSpecificResults(null);
+			$activeID = $this->object->getActiveID($ilUser->getId(), null, 0);
 
 			$questions =& $this->object->getSurveyQuestions();
 			$data = array();
 			$counter = 1;
-			$last_questionblock_id = NULL;
+			$last_questionblock_id = null;
 			foreach ($questions as $qdata) {
 				include_once './Modules/SurveyQuestionPool/classes/class.SurveyQuestion.php';
 				$question_gui = SurveyQuestion::_instanciateQuestionGUI($qdata['question_id']);
@@ -360,7 +363,7 @@ class ilSurveyExtEvaluationGUI extends ilSurveyEvaluationGUI {
 						//						var_dump($userResults); // FSX
 
 						$new_chart = $asrChartGUI->renderChart($this->object->getSurveyId(), $counter
-							- 1, $finished_ids, $userResults[$question_id][$activeID]);
+						                                                                     - 1, $finished_ids, $userResults[$question_id][$activeID]);
 						$replacement = $doc->createDocumentFragment();
 						$replacement->appendXML($new_chart);
 						$old_node->parentNode->replaceChild($replacement, $old_node);
