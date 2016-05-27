@@ -141,17 +141,18 @@ class ilExtSurveyMultipleChoiceQuestionGUI extends SurveyMultipleChoiceQuestionG
 
 	protected function renderChart($a_id, $a_variables) {
 		include_once "Services/Chart/classes/class.ilChart.php";
-		$chart = new ilChart($a_id, 700, 400);
-
+		$chart = ilChart::getInstanceByType(ilChart::TYPE_GRID, $a_id);
+		$chart->setSize('700px', '400px');
+		
 		$legend = new ilChartLegend();
 		$chart->setLegend($legend);
-		$chart->setYAxisToInteger(true);
+//		$chart->setYAxisToInteger(true);
 
-		$data = new ilChartData("bars");
+		$data = new ilChartDataBars();
 		$data->setLabel($this->lng->txt("users_answered"));
 		$data->setBarOptions(0.5, "center");
 
-		$data_own = new ilChartData("bars");
+		$data_own = new ilChartDataBars();
 		$data_own->setLabel(ilAdvancedSvyResultsPlugin::getInstance()->txt("chart_my_answer"));
 		$data_own->setBarOptions(0.5, "center");
 

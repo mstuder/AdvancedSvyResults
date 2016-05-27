@@ -73,6 +73,11 @@ class ilAdvancedSvyResultsUIHookGUI extends ilUIHookPluginGUI {
 	}
 
 
+	/**
+	 * @param $a_comp
+	 * @param $a_part
+	 * @param array $a_par
+	 */
 	public function modifyGUI($a_comp, $a_part, $a_par = array()) {
 		if ($a_part == 'tabs') {
 			if ($this->isInSurvey()) {
@@ -82,9 +87,9 @@ class ilAdvancedSvyResultsUIHookGUI extends ilUIHookPluginGUI {
 				$ilTabsGUI = $a_par['tabs'];
 				$this->ilCtrl->setParameterByClass('ilsurveyextevaluationgui', 'ref_id', $_GET['ref_id']);
 				$ilTabsGUI->addTab('svy_results', $this->plugin->txt('tabs_results'), $this->ilCtrl->getLinkTargetByClass(array(
-					'ilRouterGUI',
+					'ilUIPluginRouterGUI',
 					'asrPresentationGUI',
-					'ilSurveyExtEvaluationGUI'
+					'ilSurveyExtEvaluationGUI',
 				)));
 			}
 
@@ -94,6 +99,9 @@ class ilAdvancedSvyResultsUIHookGUI extends ilUIHookPluginGUI {
 	}
 
 
+	/**
+	 * @return bool
+	 */
 	protected function isOnResultTab() {
 		global $ilTabs;
 		/**

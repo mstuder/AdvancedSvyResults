@@ -5,14 +5,14 @@ require_once('./Modules/SurveyQuestionPool/classes/class.ilObjSurveyQuestionPool
 require_once('class.ilSurveyExtEvaluationGUI.php');
 require_once('./Services/Object/classes/class.ilObject2.php');
 require_once('./Customizing/global/plugins/Services/UIComponent/UserInterfaceHook/AdvancedSvyResults/classes/Presentation/class.ilExtSurveyEditorGUI.php');
-
+require_once('./Services/Chart/classes/class.ilChartDataBars.php');
 /**
  * Class asrPresentationGUI
  *
  * @author             Fabian Schmid <fs@studer-raimann.ch>
  * @version            1.0.0
  *
- * @ilCtrl_IsCalledBy  asrPresentationGUI : ilRouterGUI
+ * @ilCtrl_IsCalledBy  asrPresentationGUI : ilUIPluginRouterGUI
  * @ilCtrl_Calls       asrPresentationGUI : ilExtSurveyEditorGUI
  */
 class asrPresentationGUI {
@@ -47,7 +47,6 @@ class asrPresentationGUI {
 		$this->ilCtrl->saveParameter($this, 'ref_id');
 		$this->ilCtrl->setParameterByClass('ilExtSurveyEditorGUI', 'ref_id', $_GET['ref_id']);
 		$this->pl = ilAdvancedSvyResultsPlugin::getInstance();
-//		$this->pl->updateLanguageFiles();
 		$this->initHeaderAndTabs();
 	}
 
@@ -119,6 +118,7 @@ class asrPresentationGUI {
 		 */
 		$nextClass = $this->ilCtrl->getNextClass();
 
+				$this->tpl->getStandardTemplate();
 		switch ($nextClass) {
 			case 'ilsurveyextevaluationgui';
 				$ilSurveyExtEvaluationGUI = new ilSurveyExtEvaluationGUI(new ilObjSurvey($_GET['ref_id']));
@@ -131,6 +131,8 @@ class asrPresentationGUI {
 				$this->ilCtrl->forwardCommand($ilSurveyExtEvaluationGUI);
 				break;
 		}
+
+		$this->tpl->show();
 	}
 }
 
